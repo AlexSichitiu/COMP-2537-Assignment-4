@@ -50,7 +50,7 @@ async function loadCards(pokemon){
         var i = Math.floor((Math.random() * pokemon.length));
         var givenPokemon = await axios.get(pokemon[i].url);
         var card = `<div class="card">
-                        <img src="${givenPokemon.data.sprites.front_default}" class="front" id="${givenPokemon.data.name}">
+                        <img src="${givenPokemon.data.sprites.front_default}" class="front" id="${givenPokemon.data.name + pokemon.length}">
                         <img src="Poke_Ball.webp" class="back">
                     </div>`
         $('#gamespace').append(card);

@@ -5,8 +5,6 @@ let difficultyMap = [3, 6, 12];
 const setup = async () => {
     let fetch = await axios.get('https://pokeapi.co/api/v2/pokemon?offset=0&limit=493');
     candidatePokemon = fetch.data.results;
-
-
 }
 
 async function start(){
@@ -19,22 +17,26 @@ async function start(){
     }
     await loadCards(pokemon);
 
-    var firstCard = null, secondCard = null;
+    var firstCard = undefined, secondCard = undefined;
     $('.card').on('click', function() {
         $(this).toggleClass('flip');
-        firstCard == null ? firstCard = $(this).find(".front") : secondCard = $(this).find(".front");
+        firstCard == undefined ? firstCard = $(this).find(".front")[0] : secondCard = $(this).find(".front")[0];
         if (firstCard && secondCard){
             if (firstCard.src == secondCard.src){
-                console.log('match');
-                $(`#${firstCard.name}`).parent().off("click");
-                $(`#${secondCard.name}`).parent().off("click");
+                console.log('match')
+                $(`#${firstCard.id}`).parent().off("click");
+                $(`#${secondCard.id}`).parent().off("click");
+                firstCard = undefined;
+                secondCard = undefined;
             } else {
                 console.log('mismatch');
-                $(`#${firstCard.name}`).toggleClass('flip');
-                $(`#${secondCard.name}`).toggleClass('flip');
+                setTimeout(() => {
+                    $(`#${firstCard.id}`).parent().toggleClass("flip");
+                    $(`#${secondCard.id}`).parent().toggleClass("flip");
+                    firstCard = undefined;
+                    secondCard = undefined;
+                }, 1000)
             }
-            firstCard = null;
-            secondCard = null;
         }
     })
 }
@@ -44,8 +46,8 @@ async function loadCards(pokemon){
     while (pokemon.length != 0){
         var i = Math.floor((Math.random() * pokemon.length));
         var givenPokemon = await axios.get(pokemon[i].url);
-        var card = `<div class="card" name="${givenPokemon.data.name}">
-                        <img src="${givenPokemon.data.sprites.front_default}" class="front">
+        var card = `<div class="card">
+                        <img src="${givenPokemon.data.sprites.front_default}" class="front" id="${givenPokemon.data.name}">
                         <img src="Poke_Ball.webp" class="back">
                     </div>`
         $('#gamespace').append(card);

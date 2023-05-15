@@ -11,36 +11,41 @@ const setup = async () => {
     })
 }
 
-function start(){
+async function start(){
     var cardNum = difficultyMap[difficulty];
     var pokemon = [];
     for (var i = 0; i < cardNum; i++){
         var index = Math.floor((Math.random() * candidatePokemon.length));
         pokemon.push(candidatePokemon[index]);
     }
-    loadCards(pokemon);
+    await loadCards(pokemon);
+
+    $('.card').on('click', function() {
+        $(this).toggleClass('flip');
+    })
 }
 
 async function loadCards(pokemon){
+    $('#gamespace').empty();
     for (var i = 0; i < pokemon.length; i++){
         var givenPokemon = await axios.get(pokemon[i].url);
-        var card = `<div class="card" style="width: 18rem;">
+        var card = `<div class="card" name="${givenPokemon.data.name}">
                         <img src="${givenPokemon.data.sprites.front_default}" class="front">
-                        <img src="${givenPokemon.data.sprites.back_default}" class="back">
+                        <img src="Poke_Ball.webp" class="back">
                     </div>`
         $('#gamespace').append(card);
     }
 }
 
-$('#easy').on('click', () => {
+$('#easy').on('click', function() {
     difficulty = 0;
 })
 
-$('#medium').on('click', () => {
+$('#medium').on('click', function() {
     difficulty = 1;
 })
 
-$('#hard').on('click', () => {
+$('#hard').on('click', function() {
     difficulty = 2;
 })
 

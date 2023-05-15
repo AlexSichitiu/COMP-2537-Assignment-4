@@ -19,17 +19,20 @@ async function start(){
 
     var firstCard = undefined, secondCard = undefined;
     $('.card').on('click', function() {
-        $(this).toggleClass('flip');
-        firstCard == undefined ? firstCard = $(this).find(".front")[0] : secondCard = $(this).find(".front")[0];
+        if (firstCard == undefined){
+            firstCard = $(this).find(".front")[0];
+            $(this).toggleClass('flip');
+        } else if (secondCard == undefined && $(this).find(".front")[0] != firstCard){
+            secondCard = $(this).find(".front")[0];
+            $(this).toggleClass('flip');
+        }
         if (firstCard && secondCard){
             if (firstCard.src == secondCard.src){
-                console.log('match')
                 $(`#${firstCard.id}`).parent().off("click");
                 $(`#${secondCard.id}`).parent().off("click");
                 firstCard = undefined;
                 secondCard = undefined;
             } else {
-                console.log('mismatch');
                 setTimeout(() => {
                     $(`#${firstCard.id}`).parent().toggleClass("flip");
                     $(`#${secondCard.id}`).parent().toggleClass("flip");

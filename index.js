@@ -45,16 +45,20 @@ async function start(){
         if (firstCard && secondCard && !inProgress){
             if (firstCard.src == secondCard.src){
                 $(`#${firstCard.id}`).parent().off("click");
-                $(`#${firstCard.id}`).parent().css('background-color: green');
+                $(`#${firstCard.id}`).parent().css({'background-color': 'green'});
                 $(`#${secondCard.id}`).parent().off("click");
-                $(`#${secondCard.id}`).parent().css('background-color: green');
+                $(`#${secondCard.id}`).parent().css({'background-color': 'green'});
                 firstCard = undefined;
                 secondCard = undefined;
             } else {
                 inProgress = true;
+                $(`#${firstCard.id}`).parent().css({'background-color': 'red'});
+                $(`#${secondCard.id}`).parent().css({'background-color': 'red'});
                 setTimeout(() => {
                     $(`#${firstCard.id}`).parent().toggleClass("flip");
                     $(`#${secondCard.id}`).parent().toggleClass("flip");
+                    $(`#${secondCard.id}`).parent().css({'background-color': 'white'});
+                    $(`#${firstCard.id}`).parent().css({'background-color': 'white'});
                     firstCard = undefined;
                     secondCard = undefined;
                     inProgress = false;

@@ -27,6 +27,7 @@ function initHeadsUp(timeLimit){
 
 async function start(){
     var cardNum = difficultyMap[difficulty].cards;
+    var pairsMatched = 0;
     var timeLimit = difficultyMap[difficulty].time;
     var pokemon = [];
     for (var i = 0; i < cardNum; i++){
@@ -36,6 +37,17 @@ async function start(){
     }
     await loadCards(pokemon);
     initHeadsUp(timeLimit);
+
+    var pairManager = setInterval(() => {
+        var html = `
+            <div>Total # of Pairs: ${cardNum}</div>
+            <div>Pairs Matched: ${pairsMatched}</div>
+            <div>Pairs Remaining: ${cardNum - pairsMatched}</div>`
+        $('#pairStats').empty().append(html);
+        if (pairsMatched >= cardNum){
+            alert('You Won!');
+        }
+    }, 100) 
     
 
     let firstCard = undefined;
@@ -57,6 +69,7 @@ async function start(){
                 $(`#${secondCard.id}`).parent().css({'background-color': 'green'});
                 firstCard = undefined;
                 secondCard = undefined;
+                pairsMatched++;
             } else {
                 inProgress = true;
                 $(`#${firstCard.id}`).parent().css({'background-color': 'red'});
@@ -104,6 +117,11 @@ $('#hard').on('click', function() {
 $('#start').on('click', () => {
     start();
 })
+
+$('#reset').on('click', () => {
+    start();
+})
+
 
 $('#gamespace').on('click', () => {
     clickCount++;

@@ -1,8 +1,9 @@
 let candidatePokemon = [];
 let difficulty = 0;
-let difficultyMap = [{cards:3, time:120}, {cards:6, time:90}, {cards:12, time:60}];
+let difficultyMap = [{cards:3, time:18}, {cards:6, time:90}, {cards:12, time:60}];
 var timer, pairManager;
 var clickCount = 0;
+var poweredUp = false;
 
 const setup = async () => {
     let fetch = await axios.get('https://pokeapi.co/api/v2/pokemon?offset=0&limit=493');
@@ -22,6 +23,10 @@ function initHeadsUp(timeLimit){
         if (timeElapsed >= timeLimit){
             alert('Game Over!');
             resetGame();
+        }
+        var timeRemaining = timeLimit - timeElapsed;
+        if (timeRemaining > 14 && timeRemaining <= 15){
+            powerUp();
         }
     }, 1000)
 }
@@ -55,6 +60,7 @@ async function start(){
     let secondCard = undefined;
     var inProgress = false;
     $('.card').on('click', function() {
+        if (poweredUp) {return;}
         if (firstCard == undefined){
             firstCard = $(this).find(".front")[0];
             $(this).toggleClass('flip');
@@ -137,12 +143,23 @@ $('#gamespace').on('click', () => {
 
 $('#darkmode').on('click', () => {
     $('body').css({'background-color': 'darkslategray', 'color': 'white'});
-    $('button').toggleClass('btn-dark', 'btn-light');
+    $('button').toggleClass('btn-dark btn-light');
 })
 
 $('#lightmode').on('click', () => {
     $('body').css({'background-color': 'white', 'color': 'black'});
-    $('button').toggleClass('btn-dark', 'btn-light');
+    $('button').toggleClass('btn-dark btn-light');
 })
+
+function powerUp(){
+    if (!poweredUp) {
+        poweredUp = true;
+        $('#gamespace').find('.card:not(.flip)').toggleClass('powered-up flip');
+        setTimeout(() => {
+            $('#gamespace').find('.powered-up').toggleClass('powered-up flip');
+            poweredUp = false;
+        }, 1000)
+    }
+}
 
 $(document).ready(setup)

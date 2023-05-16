@@ -1,6 +1,7 @@
 let candidatePokemon = [];
 let difficulty = 0;
 let difficultyMap = [{cards:3, time:120}, {cards:6, time:90}, {cards:12, time:60}];
+var timer;
 
 const setup = async () => {
     let fetch = await axios.get('https://pokeapi.co/api/v2/pokemon?offset=0&limit=493');
@@ -17,11 +18,12 @@ async function start(){
         pokemon.push(candidatePokemon[index]);
     }
     await loadCards(pokemon);
-    const date = new Date;
+
+    clearInterval(timer);
     var startTime = Date.now();
-    var timeElapsed;
+    var timeElapsed = 0;
     $('#timer').empty().append(`<h1> 0 / ${timeLimit}s Remaining</h1>`);
-    setInterval(() => {
+    timer = setInterval(() => {
         timeElapsed = (Date.now() - startTime) / 1000;
         $('#timer').empty().append(`<h1>${Math.floor(timeElapsed)} / ${timeLimit}s Remaining</h1>`);
         if (timeElapsed >= timeLimit){
@@ -43,7 +45,9 @@ async function start(){
         if (firstCard && secondCard && !inProgress){
             if (firstCard.src == secondCard.src){
                 $(`#${firstCard.id}`).parent().off("click");
+                $(`#${firstCard.id}`).parent().css('background-color: green');
                 $(`#${secondCard.id}`).parent().off("click");
+                $(`#${secondCard.id}`).parent().css('background-color: green');
                 firstCard = undefined;
                 secondCard = undefined;
             } else {

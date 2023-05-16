@@ -17,7 +17,9 @@ async function start(){
     }
     await loadCards(pokemon);
 
-    var firstCard = undefined, secondCard = undefined;
+    let firstCard = undefined;
+    let secondCard = undefined;
+    var inProgress = false;
     $('.card').on('click', function() {
         if (firstCard == undefined){
             firstCard = $(this).find(".front")[0];
@@ -26,18 +28,20 @@ async function start(){
             secondCard = $(this).find(".front")[0];
             $(this).toggleClass('flip');
         }
-        if (firstCard && secondCard){
+        if (firstCard && secondCard && !inProgress){
             if (firstCard.src == secondCard.src){
                 $(`#${firstCard.id}`).parent().off("click");
                 $(`#${secondCard.id}`).parent().off("click");
                 firstCard = undefined;
                 secondCard = undefined;
             } else {
+                inProgress = true;
                 setTimeout(() => {
                     $(`#${firstCard.id}`).parent().toggleClass("flip");
                     $(`#${secondCard.id}`).parent().toggleClass("flip");
                     firstCard = undefined;
                     secondCard = undefined;
+                    inProgress = false;
                 }, 1000)
             }
         }

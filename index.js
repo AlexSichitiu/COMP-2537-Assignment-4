@@ -1,6 +1,6 @@
 let candidatePokemon = [];
 let difficulty = 0;
-let difficultyMap = [{cards:3, time:18}, {cards:6, time:90}, {cards:12, time:60}];
+let difficultyMap = [{cards:3, time:120}, {cards:6, time:90}, {cards:12, time:60}];
 var timer, pairManager;
 var clickCount = 0;
 var poweredUp = false;

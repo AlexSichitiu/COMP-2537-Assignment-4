@@ -1,6 +1,6 @@
 let candidatePokemon = [];
 let difficulty = 0;
-let difficultyMap = [{cards:3, time:5}, {cards:6, time:90}, {cards:12, time:60}];
+let difficultyMap = [{cards:3, time:120}, {cards:6, time:90}, {cards:12, time:60}];
 var timer, pairManager;
 var clickCount = 0;
 
@@ -133,6 +133,16 @@ function resetGame(){
 $('#gamespace').on('click', () => {
     clickCount++;
     $('#clickCounter').empty().append(`Total Clicks: ${clickCount}`);
+})
+
+$('#darkmode').on('click', () => {
+    $('body').css({'background-color': 'darkslategray', 'color': 'white'});
+    $('button').toggleClass('btn-dark', 'btn-light');
+})
+
+$('#lightmode').on('click', () => {
+    $('body').css({'background-color': 'white', 'color': 'black'});
+    $('button').toggleClass('btn-dark', 'btn-light');
 })
 
 $(document).ready(setup)

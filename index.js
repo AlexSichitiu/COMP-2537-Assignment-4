@@ -1,6 +1,6 @@
 let candidatePokemon = [];
 let difficulty = 0;
-let difficultyMap = [3, 6, 12];
+let difficultyMap = [{cards:3, time:120}, {cards:6, time:90}, {cards:12, time:60}];
 
 const setup = async () => {
     let fetch = await axios.get('https://pokeapi.co/api/v2/pokemon?offset=0&limit=493');
@@ -8,7 +8,8 @@ const setup = async () => {
 }
 
 async function start(){
-    var cardNum = difficultyMap[difficulty];
+    var cardNum = difficultyMap[difficulty].cards;
+    var timeLimit = difficultyMap[difficulty].time;
     var pokemon = [];
     for (var i = 0; i < cardNum; i++){
         var index = Math.floor((Math.random() * candidatePokemon.length));
@@ -16,6 +17,17 @@ async function start(){
         pokemon.push(candidatePokemon[index]);
     }
     await loadCards(pokemon);
+    const date = new Date;
+    var startTime = Date.now();
+    var timeElapsed;
+    $('#timer').empty().append(`<h1> 0 / ${timeLimit}s Remaining</h1>`);
+    setInterval(() => {
+        timeElapsed = (Date.now() - startTime) / 1000;
+        $('#timer').empty().append(`<h1>${Math.floor(timeElapsed)} / ${timeLimit}s Remaining</h1>`);
+        if (timeElapsed >= timeLimit){
+            alert('Game Over!');
+        }
+    }, 1000)
 
     let firstCard = undefined;
     let secondCard = undefined;

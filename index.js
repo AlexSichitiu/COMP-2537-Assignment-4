@@ -2,6 +2,7 @@ let candidatePokemon = [];
 let difficulty = 0;
 let difficultyMap = [{cards:3, time:120}, {cards:6, time:90}, {cards:12, time:60}];
 var timer;
+var clickCount = 0;
 
 const setup = async () => {
     let fetch = await axios.get('https://pokeapi.co/api/v2/pokemon?offset=0&limit=493');
@@ -11,6 +12,7 @@ const setup = async () => {
 async function start(){
     var cardNum = difficultyMap[difficulty].cards;
     var timeLimit = difficultyMap[difficulty].time;
+    clickCount = 0;
     var pokemon = [];
     for (var i = 0; i < cardNum; i++){
         var index = Math.floor((Math.random() * candidatePokemon.length));
@@ -96,6 +98,11 @@ $('#hard').on('click', function() {
 
 $('#start').on('click', () => {
     start();
+})
+
+$('#gamespace').on('click', () => {
+    clickCount++;
+    $('#clickCounter').empty().append(`Total Clicks: ${clickCount}`);
 })
 
 $(document).ready(setup)

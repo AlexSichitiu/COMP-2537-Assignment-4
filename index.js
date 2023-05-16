@@ -9,18 +9,9 @@ const setup = async () => {
     candidatePokemon = fetch.data.results;
 }
 
-async function start(){
-    var cardNum = difficultyMap[difficulty].cards;
-    var timeLimit = difficultyMap[difficulty].time;
+function initHeadsUp(timeLimit){
     clickCount = 0;
-    var pokemon = [];
-    for (var i = 0; i < cardNum; i++){
-        var index = Math.floor((Math.random() * candidatePokemon.length));
-        pokemon.push(candidatePokemon[index]);
-        pokemon.push(candidatePokemon[index]);
-    }
-    await loadCards(pokemon);
-
+    $('#clickCounter').empty().append(`Total Clicks: ${clickCount}`);
     clearInterval(timer);
     var startTime = Date.now();
     var timeElapsed = 0;
@@ -32,6 +23,20 @@ async function start(){
             alert('Game Over!');
         }
     }, 1000)
+}
+
+async function start(){
+    var cardNum = difficultyMap[difficulty].cards;
+    var timeLimit = difficultyMap[difficulty].time;
+    var pokemon = [];
+    for (var i = 0; i < cardNum; i++){
+        var index = Math.floor((Math.random() * candidatePokemon.length));
+        pokemon.push(candidatePokemon[index]);
+        pokemon.push(candidatePokemon[index]);
+    }
+    await loadCards(pokemon);
+    initHeadsUp(timeLimit);
+    
 
     let firstCard = undefined;
     let secondCard = undefined;

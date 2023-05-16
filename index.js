@@ -1,7 +1,7 @@
 let candidatePokemon = [];
 let difficulty = 0;
-let difficultyMap = [{cards:3, time:120}, {cards:6, time:90}, {cards:12, time:60}];
-var timer;
+let difficultyMap = [{cards:3, time:5}, {cards:6, time:90}, {cards:12, time:60}];
+var timer, pairManager;
 var clickCount = 0;
 
 const setup = async () => {
@@ -21,6 +21,7 @@ function initHeadsUp(timeLimit){
         $('#timer').empty().append(`<h1>${Math.floor(timeElapsed)} / ${timeLimit}s Remaining</h1>`);
         if (timeElapsed >= timeLimit){
             alert('Game Over!');
+            resetGame();
         }
     }, 1000)
 }
@@ -38,7 +39,7 @@ async function start(){
     await loadCards(pokemon);
     initHeadsUp(timeLimit);
 
-    var pairManager = setInterval(() => {
+    pairManager = setInterval(() => {
         var html = `
             <div>Total # of Pairs: ${cardNum}</div>
             <div>Pairs Matched: ${pairsMatched}</div>
@@ -46,10 +47,10 @@ async function start(){
         $('#pairStats').empty().append(html);
         if (pairsMatched >= cardNum){
             alert('You Won!');
+            resetGame();
         }
     }, 100) 
     
-
     let firstCard = undefined;
     let secondCard = undefined;
     var inProgress = false;
@@ -118,9 +119,15 @@ $('#start').on('click', () => {
     start();
 })
 
-$('#reset').on('click', () => {
-    start();
-})
+$('#reset').on('click', resetGame);
+
+function resetGame(){
+    console.log('reset')
+    clearInterval(timer);
+    clearInterval(pairManager);
+    $('#headsup').children().empty();
+    $('#gamespace').empty();
+}
 
 
 $('#gamespace').on('click', () => {
